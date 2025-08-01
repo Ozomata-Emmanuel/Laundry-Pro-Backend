@@ -68,4 +68,58 @@ async function getSingleBranch(req, res) {
   }
 }
 
-export { createBranch, getAllBranches, getSingleBranch };
+async function deleteBranch(req, res) {
+  try {
+    const branch = await BranchModel.findByIdAndDelete(req.params.id);
+
+    if (!branch) {
+      return res.status(404).json({
+        success: false,
+        error: 'branch not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: branch,
+      message: "Branch deleted successfully"
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      error: 'Server Error'
+    });
+  }
+}
+
+async function updateBranchStatus(req, res) {
+  try {
+    const branch = await BranchModel.findById(req.params.id);
+    
+    if (!branch) {
+      return res.status(404).json({
+        success: false,
+        error: 'Branch not found'
+      });
+    }
+
+    const newStatus = branch.status === 'active' ? 'inactive' : 'active';
+    branch.status = newStatus;
+    await branch.save();
+
+    res.status(200).json({
+      success: true,
+      data: branch,
+      message: `Branch ${newStatus === 'active' ? 'activated' : 'deactivated'} successfully`
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      error: 'Server Error'
+    });
+  }
+}
+
+export { createBranch, getAllBranches, getSingleBranch, deleteBranch, updateBranchStatus };

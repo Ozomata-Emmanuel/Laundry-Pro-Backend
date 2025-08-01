@@ -336,7 +336,7 @@ async function markPaymentAsPaid(req, res) {
         is_paid: true,
       },
       { new: true }
-    ).populate('user', 'first_name last_name email phone');
+    )
 
     res.status(200).json({
       success: true,

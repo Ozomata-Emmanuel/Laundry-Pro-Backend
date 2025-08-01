@@ -8,6 +8,7 @@ import {
   getNonAdmins, 
   updateUser, 
   getEmployeesByBranch,
+  getCusomersByBranch,
   forgotPassword,
   resetPassword,
   verifyUser,
@@ -29,6 +30,7 @@ router.get("/laundry/api/users/all",protect , authorize("admin", "manager"), get
 router.get("/laundry/api/users/allcustomers",protect , authorize("admin", "manager"), getAllCustomers);
 router.get("/laundry/api/users/allusers",protect , authorize("admin", "manager"), getNonAdmins);
 router.get("/laundry/api/users/branch/:branchId/employees",protect , authorize("admin", "manager"), getEmployeesByBranch);
+router.get("/laundry/api/users/branch/:branchId/customers",protect , authorize("admin", "manager"), getCusomersByBranch);
 router.get("/laundry/api/user/:id", getSingleUser);
 router.delete("/laundry/api/deleteUser/:id",protect , authorize("admin", "manager"), deleteUser);
 router.post("/laundry/api/users/forgot-password", forgotPassword);

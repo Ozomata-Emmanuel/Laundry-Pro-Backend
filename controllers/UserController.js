@@ -292,6 +292,44 @@ async function getEmployeesByBranch(req, res) {
   }
 }
 
+async function getCusomersByBranch(req, res) {
+  try {
+    const { branchId } = req.params;
+
+    if (!branchId) {
+      return res.status(400).json({
+        success: false,
+        message: "Branch ID is required",
+      });
+    }
+
+    const employees = await UserModel.find(
+      {
+        branch: branchId,
+        role: "customer",
+        isActive: true,
+      },
+      {
+        password: 0,
+        __v: 0,
+      }
+    ).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      message: "Customers retrieved successfully",
+      data: employees,
+    });
+  } catch (error) {
+    console.error("Error fetching customers by branch:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to get customers",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
+}
+
 const getSingleUser = async (req, res) => {
   try {
     const id = req.params.id;
@@ -612,6 +650,7 @@ export {
   loginUser,
   getNonAdmins,
   getEmployeesByBranch,
+  getCusomersByBranch,
   forgotPassword,
   resetPassword,
   resendVerification,
